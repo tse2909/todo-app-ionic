@@ -1,0 +1,10 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Todos</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <todo-form (addTodo)="addTodo($event)"></todo-form>
+  <todo-list [todos]="(todos | async)" (toggleTodoComplete)="toggleTodoComplete($event)" (removeTodo)="removeTodo($event)"></todo-list>
+</ion-content>
