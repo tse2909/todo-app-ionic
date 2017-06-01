@@ -27457,6 +27457,6 @@ ion-navbar.toolbar {
 
 todo-list ion-label.label-finished {
   text-decoration: line-through;
-  font-size: 20px;
+  font-size: 16px;
   color: #bdc3c7;
 }
