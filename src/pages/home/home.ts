@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { Subject } from 'rxjs';
 import { Store, Action } from '@ngrx/store';
@@ -13,39 +13,56 @@ import { getTodos } from '../../app/ngrx/reducers';
   templateUrl: 'home.html'
 })
 export class HomePage {
-   todos: Observable<any[]>;
+  todos: Observable<any[]>;
   actions$ = new Subject<Action>();
-  constructor(public navCtrl: NavController,public store: Store<any>) {
-this.actions$.subscribe(store);
+  constructor(public navCtrl: NavController, public store: Store<any>, public loadingCtrl: LoadingController) {
+    this.actions$.subscribe(store);
     this.actions$.next(requestTodo());
     this.todos = this.store.let(getTodos());
   }
-  
-  addTodo($event){
+
+  addTodo($event) {
     console.log($event);
     let todoData = {
-      title : $event,
-      finish : false
+      title: $event,
+      finish: false
     }
     this.actions$.next(addTodo(todoData));
     this.todos = this.store.let(getTodos());
   }
 
-  toggleTodoComplete($event){
+  toggleTodoComplete($event) {
+    let loading = this.loadingCtrl.create({
+      content: 'Updating todo ...'
+    });
+    loading.present();
     let todoData = {
-      id : $event._id,
-      finish : !$event.finish
+      id: $event._id,
+      finish: !$event.finish
     }
-    console.log(todoData);
     this.actions$.next(updateTodo(todoData));
     this.todos = this.store.let(getTodos());
+    setTimeout(() => {
+      loading.dismiss();
+    }, 1000);
+    
   }
 
-  removeTodo($event){
+  removeTodo($event) {
+    let loading = this.loadingCtrl.create({
+      content: 'Removing todo ...'
+    });
+    loading.present();
+
     let todoData = {
-      id : $event._id,
+      id: $event._id,
     }
     this.actions$.next(removeTodo(todoData));
     this.todos = this.store.let(getTodos());
+
+    setTimeout(() => {
+      loading.dismiss();
+    }, 1000);
+    
   }
 }
